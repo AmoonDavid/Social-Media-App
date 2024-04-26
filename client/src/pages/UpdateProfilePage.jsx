@@ -9,6 +9,11 @@ import {
 	useColorModeValue,
 	Avatar,
 	Center,
+	Alert,
+	AlertIcon,
+	AlertTitle,
+	AlertDescription,
+	Box,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -60,6 +65,26 @@ export default function UpdateProfilePage() {
 			setUpdating(false);
 		}
 	};
+
+	const handleVerifyEmail = async ()=> {
+		try {
+			if (user.isVerified){
+				showToast("Error", "email is already Verified no further action required", "error");
+				return;
+			}
+
+			
+			showToast("Succcess",`Verification email sent at: ${user.email}. Please make sure to check your spam folder.`, "success");
+		
+
+			
+			
+		} catch (error) {
+			showToast("Error", error.message, "error")
+		}
+	}
+
+	console.log(user);
 	return (
 		<form onSubmit={handleSubmit}>
 			<Flex align={"center"} justify={"center"} my={6}>
@@ -117,6 +142,22 @@ export default function UpdateProfilePage() {
 							_placeholder={{ color: "gray.500" }}
 							type='email'
 						/>
+						{ !user.isVerified && (
+							
+							<Button
+							bg={"green.400"}
+							color={"white"}
+							w='full'
+							_hover={{
+								bg: "green.500",
+							}}
+							mt={4}
+							onClick={handleVerifyEmail}
+						>
+							Verify
+						</Button>
+						)}
+						
 					</FormControl>
 					<FormControl>
 						<FormLabel>Bio</FormLabel>

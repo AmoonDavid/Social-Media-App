@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import generteTokenAndSetCookie from "../utils/GenerateTokenAndSetCookies.js";
 import {v2 as cloudinary} from 'cloudinary';
 import mongoose from "mongoose";
+import crypto, { randomBytes } from "crypto";
 
 const signupUser = async (req, res) => {
     const {name, email, username, password} = req.body;
@@ -20,7 +21,7 @@ const signupUser = async (req, res) => {
          const hashedPassword = await bcrypt.hash(password, salt);
 
          //Creating the user
-         const newUser = new User({name, email, username, password:hashedPassword });
+         const newUser = new User({name, email, username, password:hashedPassword, emailToken:randomBytes(64).toString("hex") });
 
          await newUser.save();
 
@@ -55,7 +56,7 @@ const loginUser = async (req, res) => {
         }
 
         generteTokenAndSetCookie(user._id, res);
-        res.status(200).json({_id: user._id, name: user.name, email:user.email, username: user.username, bio: user.bio, profilePic: user.profilePic}); 
+        res.status(200).json({_id: user._id, name: user.name, email:user.email, username: user.username, bio: user.bio, profilePic: user.profilePic, isVerified: user.isVerified}); 
 
     } catch (err) {
         res.status(500).json({error: err.message});
@@ -104,55 +105,8 @@ const followUnfollowUser = async (req, res) => {
     }
 }
 
-// const updateUser = async (req, res) => {
-//     const {name, email, username, password, bio} = req.body;
-//     let {profilePic} = req.body;
-//     const userId = req.user._id;
-//     try {
-
-//         let user = await User.findById(userId);
-
-//         if(!user) {
-//             res.status(400).json({error: "User not found"});
-//         }
-
-//         if(req.params.id !== userId.toString()){
-            
-//             return res.status(400).json({error: "You can not update other user's profile"});
-//         }
-
-//         if(password){
-//             const salt = await bcrypt.genSalt(10);
-//             const hashedPassword = await bcrypt.hash(password, salt);
-//             user.password = hashedPassword;
-//         }
-
-//         if(profilePic){
-
-//             if(user.profilePic){
-//                 await cloudinary.uploader.destroy(user.profilePic.split("/").pop().split(".")[0]);
-//             }
-//             const uploadResponse = await cloudinary.uploader.upload(profilePic);
-//             profilePic = uploadResponse.secure_url;
-//         }
-
-//         user.name = name || user.name;
-//         user.email = email || user.email;
-//         user.username = username || user.username;
-//         user.profilePic = profilePic || user.profilePic;
-//         user.bio = bio || user.bio;
-
-//         user = await user.save();
-
-//         user.password = null;
-        
-//         res.status(200).json({message: "Profile Updated Successfully", user});
-        
-//     } catch (err) {
-//         res.status(500).json({error: err.message});
-//         console.log("Error in Update Controller", err.message);
-//     }
-// }
+//
+//
 
 const updateUser = async (req, res) => {
 	const { name, email, username, password, bio } = req.body;
@@ -273,6 +227,33 @@ const getSuggestedUsers = async (req, res) => {
     }
 }
 
+const verifyEmail = async (req, res) => {
+    
+    try {
+        const {emailToken} = req.body;
+        if(!emailToken) {
+            return res.status(400).json({error: "Email Token not found"});
+        }
+        const user = await User.findOne({emailToken});
+        if(!user){
+            return res.status(400).json({error: "Your email is already verified no further afction required"});
+        }else {
+            user.emailToken = null;
+            user.isVerified = true;
+            await user.save();
+            // generteTokenAndSetCookie(user._id, res);
+            res.status(200).json({message: "Email Successfully Verifed"});
+
+        }
+
+        
+        
+    } catch (error) {
+        res.status(500).json({error: error.message});
+        console.log("Error in verifyEmail Controller", error.message);
+    }
+}
 
 
-export {signupUser, loginUser, logoutUser, followUnfollowUser, updateUser, getUserProfile, getSuggestedUsers};
+
+export {signupUser, loginUser, logoutUser, followUnfollowUser, updateUser, getUserProfile, getSuggestedUsers, verifyEmail};

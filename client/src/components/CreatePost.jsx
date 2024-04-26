@@ -30,7 +30,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 
 const MAX_CHAR = 500;
 
-const CreatePost = () => {
+const CreatePost = ({}) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [postText, setPostText] = useState("");
 	const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
@@ -41,6 +41,7 @@ const CreatePost = () => {
 	const [loading, setLoading] = useState(false);
 	const [posts, setPosts] = useRecoilState(postsAtom);
 	const {username} = useParams();
+	console.log(username)
 
 	const handleTextChange = (e) => {
 		const inputText = e.target.value;
@@ -74,6 +75,10 @@ const CreatePost = () => {
 
 			if(username === user.username){
 				setPosts([data, ...posts]);
+				setLoading(false);
+				onClose();
+            	setPostText("");
+            	setImgUrl("");
 			}
 			else{
 				showToast("Error", "Please Go to your own HomePage to create a post", "error")
@@ -108,8 +113,9 @@ const CreatePost = () => {
 			>
 				<AddIcon />
 			</Button> */}
+			
 
-		<Button onClick={onOpen} variant={"ghost"}><IoIosAddCircleOutline size={24}/></Button>
+		<Button onClick={onOpen} variant={"ghost"} p={0} ><IoIosAddCircleOutline size={30}/></Button>
 
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />

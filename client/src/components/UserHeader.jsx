@@ -4,9 +4,10 @@ import {BsInstagram} from "react-icons/bs"
 import {CgMoreO} from "react-icons/cg"
 import { useRecoilValue } from 'recoil'
 import userAtom from '../../atoms/userAtom'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import useShowToast from '../../hooks/useShowToast'
 import useFollowUnfollow from '../../hooks/useFollowUnfollow'
+import CreatePost from './CreatePost'
 
 const UserHeader = ({user}) => {
 
@@ -19,6 +20,8 @@ const UserHeader = ({user}) => {
             showToast("Done" , "Profile Link Copied", "success")
         })
     };
+
+    const {username} = useParams();
 
 
   return (
@@ -64,9 +67,17 @@ const UserHeader = ({user}) => {
                     <Link color={"gray.light"}>instagram.com</Link>
                 </Flex>
                 <Flex>
+                    {username === currentUser.username && (
+                        
+                        <CreatePost/>
+                        
+                    )}
+                    
+                    
                     <Box className='icon-container'>
                         <BsInstagram size={24} cursor={"pointer"}/>
                     </Box>
+                    
                     <Box className='icon-container'>
 
                         <Menu>

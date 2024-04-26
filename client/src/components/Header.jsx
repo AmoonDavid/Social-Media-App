@@ -2,7 +2,7 @@ import { Box, Button, Flex, Image, useColorMode, useColorModeValue } from '@chak
 import React from 'react'
 import {useRecoilValue} from "recoil";
 import userAtom from "../../atoms/userAtom"
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { IoHomeOutline } from "react-icons/io5";
 import { RxAvatar } from "react-icons/rx";
 import LogoutButton from './LogoutButton';
@@ -21,6 +21,7 @@ const Header = () => {
     const {colorMode, toggleColorMode} = useColorMode();
     const user = useRecoilValue(userAtom);
     const navigate = useNavigate();
+    
     const handleUserPageClick = ()=> {
       navigate(`/${user.username}`);
     }
@@ -31,6 +32,7 @@ const Header = () => {
     const handleChatClick = ()=> {
       navigate("/chat")
     }
+
    
   return (
     <>
@@ -74,7 +76,6 @@ const Header = () => {
 
                 <Button onClick={handleUserPageClick} variant={"ghost"}><RxAvatar size={24}/></Button>
                 
-                <CreatePost/>
                 <Button variant={"ghost"} onClick={handleChatClick}><BsChatQuote size={24}/></Button>
                 <Button onClick={toggleColorMode} variant={"ghost"}><VscColorMode size={24}/></Button>
 
