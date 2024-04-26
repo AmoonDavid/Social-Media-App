@@ -5,6 +5,7 @@ import generteTokenAndSetCookie from "../utils/GenerateTokenAndSetCookies.js";
 import {v2 as cloudinary} from 'cloudinary';
 import mongoose from "mongoose";
 import crypto, { randomBytes } from "crypto";
+import sendVerificationMail from "../utils/helpers/sendVerificationMail.js";
 
 const signupUser = async (req, res) => {
     const {name, email, username, password} = req.body;
@@ -228,22 +229,21 @@ const getSuggestedUsers = async (req, res) => {
 }
 
 const verifyEmail = async (req, res) => {
-    
+    const userId = req.user?._id.toString();
     try {
-        const {emailToken} = req.body;
-        if(!emailToken) {
+
+        const user = await User.findById(userId);
+        
+        const EmailVerifyToken = user.emailToken
+
+        if(!EmailVerifyToken) {
             return res.status(400).json({error: "Email Token not found"});
         }
-        const user = await User.findOne({emailToken});
         if(!user){
             return res.status(400).json({error: "Your email is already verified no further afction required"});
         }else {
-            user.emailToken = null;
-            user.isVerified = true;
-            await user.save();
-            // generteTokenAndSetCookie(user._id, res);
-            res.status(200).json({message: "Email Successfully Verifed"});
-
+            sendVerificationMail(user);
+            res.status(200).json({message: "Email Sent succsessfully"});
         }
 
         
@@ -254,6 +254,26 @@ const verifyEmail = async (req, res) => {
     }
 }
 
+const checkVerifyEmail = async (req, res) => {
+    const {emailToken} = req.params;
+    try {
+        const user = await User.findOne({emailToken});
+        if(!user) {
+            res.status(404).json({error: "This is not a valid token or it's already been used"})
+            return;
+        } else {
+            user.emailToken=null;
+            user.isVerified = true;
+
+            await user.save();
+        }
+
+        
+    } catch (error) {
+        res.status(500).json({error: error.message});
+        console.log("Error in checkVerifyEmail Controller", error.message);
+    }
+}
 
 
-export {signupUser, loginUser, logoutUser, followUnfollowUser, updateUser, getUserProfile, getSuggestedUsers, verifyEmail};
+export {signupUser, loginUser, logoutUser, followUnfollowUser, updateUser, getUserProfile, getSuggestedUsers, verifyEmail, checkVerifyEmail};

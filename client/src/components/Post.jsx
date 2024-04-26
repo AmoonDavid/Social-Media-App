@@ -121,10 +121,6 @@ const Post = ({post, postedBy}) => {
                     )
 
                     }
-
-
-                {/* <Avatar 
-                name='Dan Abrahmov' size={"xs"} position={"absolute"} top={"0px"} left={"15px"} p={"2px"} src='https://bit.ly/dan-abramov' /> */}
                 
                 
                 </Box>
@@ -137,7 +133,9 @@ const Post = ({post, postedBy}) => {
                     e.preventDefault();
                     navigate(`/${user.username}`)
                 }}>{user.username}</Text>
-                        <Image src='/verified.png' w={4} h={4} ml={1}/>
+
+                        {user.isVerified && <Image src='/verified.png' w={4} h={4} ml={1}/> }
+                        
                     </Flex>
                     <Flex gap={4} alignItems={"center"}>
                         <Text fontSize={"xs"} width={36} textAlign={"right"} color={"gray.light"}>

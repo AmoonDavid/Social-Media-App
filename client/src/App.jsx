@@ -12,6 +12,7 @@ import LogoutButton from './components/LogoutButton'
 import UpdateProfilePage from './pages/UpdateProfilePage'
 import CreatePost from './components/CreatePost'
 import ChatPage from './pages/ChatPage'
+import EmailVerificationPage from './pages/EmailVerificationPage'
 
 
 
@@ -33,6 +34,7 @@ const App = () => {
           <Route path={"/:username/post/:pid"} element={<PostPage/>}/>
           <Route path={"/chat"} element={ user?  <ChatPage/> : <Navigate to={"/auth"} /> }/>
           <Route  path={"/*"}element ={user ? <HomePage/> : <Navigate to={"/auth"}/>}/>
+          <Route path={"/verify/:emailToken"} element={<EmailVerificationPage/>}/>
         </Routes>
       </Container>
     </Box>

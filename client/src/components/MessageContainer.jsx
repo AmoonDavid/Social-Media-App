@@ -104,6 +104,7 @@ const MessageContainer = () => {
 		getMessages();
 	}, [showToast, selectedConversation.userId, selectedConversation.mock]);
 
+		console.log(selectedConversation);
 	return (
 		<Flex
 			flex='70'
@@ -114,10 +115,11 @@ const MessageContainer = () => {
 		>
 			{/* Message header */}
 			<Flex w={"full"} h={12} alignItems={"center"} gap={2}>
-				<Avatar src={selectedConversation.userProfilePic} size={"sm"} />
+				<Avatar name = {selectedConversation.name} src={selectedConversation.userProfilePic} size={"sm"} />
 				<Text display={"flex"} alignItems={"center"}>
-					{selectedConversation.username} <Image src='/verified.png' w={4} h={4} ml={1} />
+					{selectedConversation.username} 
 				</Text>
+				{selectedConversation.isVerfied && <Image src='/verified.png' w={4} h={4}/>}
 			</Flex>
 
 			<Divider />

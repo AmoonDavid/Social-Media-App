@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Text, VStack, Menu, MenuItem, MenuButton, Portal, MenuList, useToast, Button } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Text, VStack, Menu, MenuItem, MenuButton, Portal, MenuList, useToast, Button, Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import {BsInstagram} from "react-icons/bs"
 import {CgMoreO} from "react-icons/cg"
@@ -33,6 +33,7 @@ const UserHeader = ({user}) => {
                     <Flex gap={2} alignItems={"center"}>
                         <Text fontSize={"sm"} >{user.username}</Text>
                         <Text fontSize={"sm"} bg={"gray.dark"} color={"gray.light"} p={1} borderRadius={"full"}>threads.net</Text>
+                        {user.isVerified && <Image src='/verified.png' w={4} h={4} ml={1}/> }
                     </Flex>
                 </Box>
                 <Box>
@@ -67,7 +68,7 @@ const UserHeader = ({user}) => {
                     <Link color={"gray.light"}>instagram.com</Link>
                 </Flex>
                 <Flex>
-                    {username === currentUser.username && (
+                    {username === currentUser?.username && (
                         
                         <CreatePost/>
                         

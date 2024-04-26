@@ -1,5 +1,5 @@
 import express from "express";
-import { followUnfollowUser, getSuggestedUsers, getUserProfile, loginUser, logoutUser, signupUser, updateUser, verifyEmail } from "../controllers/userController.js";
+import { checkVerifyEmail, followUnfollowUser, getSuggestedUsers, getUserProfile, loginUser, logoutUser, signupUser, updateUser, verifyEmail } from "../controllers/userController.js";
 import protectRoute from "../middlewares/protectRoutes.js";
 
 const router = express.Router();
@@ -11,7 +11,8 @@ router.route("/login").post(loginUser);
 router.route("/logout").post(logoutUser);
 router.route("/follow/:id").post(protectRoute, followUnfollowUser);
 router.route("/update/:id").put(protectRoute, updateUser);
-router.route("/verify").post(verifyEmail);
+router.route("/verify").get(protectRoute, verifyEmail);
+router.route("/verify/:emailToken").get(checkVerifyEmail);
 
 
 

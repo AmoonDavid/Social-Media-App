@@ -14,6 +14,7 @@ import {
 	AlertTitle,
 	AlertDescription,
 	Box,
+	Image,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -73,10 +74,13 @@ export default function UpdateProfilePage() {
 				return;
 			}
 
-			
-			showToast("Succcess",`Verification email sent at: ${user.email}. Please make sure to check your spam folder.`, "success");
-		
-
+			const res = await fetch("/api/users/verify");
+			const data =  await res.json();
+			if(data.error) {
+				showToast("Error", data.error, "error")
+			} else {
+				showToast("Succcess",`Verification email sent at: ${user.email}. Please make sure to check your spam folder.`, "success");
+			}
 			
 			
 		} catch (error) {
@@ -104,6 +108,7 @@ export default function UpdateProfilePage() {
 						<Stack direction={["column", "row"]} spacing={6}>
 							<Center>
 								<Avatar size='xl' boxShadow={"md"} src={imgUrl || user.profilePic} name={user.name}/>
+								{user.isVerified && <Image src='/verified.png' w={4} h={4} ml={1}/> }
 							</Center>
 							<Center w='full'>
 								<Button w='full' onClick={() => fileRef.current.click()}>

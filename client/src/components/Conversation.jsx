@@ -39,6 +39,8 @@ const Conversation = ({ conversation, isOnline }) => {
 					userProfilePic: user.profilePic,
 					username: user.username,
 					mock: conversation.mock,
+					name: user.name,
+					isVerfied:user.isVerified,
 				})
 			}
 			bg={
@@ -54,16 +56,21 @@ const Conversation = ({ conversation, isOnline }) => {
 						md: "md",
 					}}
 					src={user.profilePic}
+					name={user.name}
 				>
 					{isOnline ? <AvatarBadge boxSize='1em' bg='green.500' /> : ""}
 				</Avatar>
 			</WrapItem>
 
 			<Stack direction={"column"} fontSize={"sm"}>
+				<Box display={"flex"} alignItems={"center"}>
 				<Text fontWeight='700' display={"flex"} alignItems={"center"}>
-					{user.username} <Image src='/verified.png' w={4} h={4} ml={1} />
+					{user.username} 
 				</Text>
-				<Text fontSize={"xs"} display={"flex"} alignItems={"center"} gap={1}>
+				{user.isVerified && <Image src='/verified.png' w={4} h={4} ml={1}/> }
+				</Box>
+
+				<Box display={"flex"} alignItems={"center"} gap={1}>
 					{currentUser._id === lastMessage.sender ? (
 						<Box color={lastMessage.seen ? "blue.400" : ""}>
 							<BsCheck2All size={16} />
@@ -71,10 +78,10 @@ const Conversation = ({ conversation, isOnline }) => {
 					) : (
 						""
 					)}
-					{lastMessage.text.length > 18
-						? lastMessage.text.substring(0, 18) + "..."
+					{lastMessage.text.length > 15
+						? lastMessage.text.substring(0, 15) + "..."
 						: lastMessage.text || <BsFillImageFill size={16} />}
-				</Text>
+				</Box>
 			</Stack>
 		</Flex>
 	);
