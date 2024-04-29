@@ -8,15 +8,17 @@ import { useNavigate } from "react-router-dom";
 import { IoMdLogOut } from "react-icons/io";
 import { AiOutlineLogout } from "react-icons/ai";
 import { selectedConversationAtom } from '../../atoms/messagesAtom'
+import postsAtom from "../../atoms/postsAtom";
 
 const LogoutButton = () => {
 	const setUser = useSetRecoilState(userAtom);
 	const showToast = useShowToast();
 	const navigate = useNavigate();
 	const setSelectedConversations = useSetRecoilState(selectedConversationAtom);
+	const setPosts = useSetRecoilState(postsAtom);
 	const handleLogout = async () => {
 		try {
-			const res = await fetch("/api/users/logout", {
+			const res = await fetch(import.meta.env.VITE_LOGOUT_API, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -32,6 +34,7 @@ const LogoutButton = () => {
 			localStorage.removeItem("user-threads");
 			setUser(null);
 			setSelectedConversations([]);
+			setPosts([]);
 			navigate("/");
             
 		} catch (error) {

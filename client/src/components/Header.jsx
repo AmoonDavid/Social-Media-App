@@ -33,6 +33,8 @@ const Header = () => {
       navigate("/chat")
     }
 
+    console.log(user);
+
    
   return (
     <>
@@ -62,17 +64,6 @@ const Header = () => {
               
               <Button onClick={handleHomePageClick} variant={"ghost"}><SiHomebridge size={24}/></Button>
               
-                {/* <Image
-                cursor={"pointer"}
-                w={6}
-                alt='Threads Logo'
-                src={colorMode === "dark" ? "/light-logo.svg" : "/dark-logo.svg"}
-                onClick={toggleColorMode}
-                /> */}
-              
-                {/* <Link to={`/${user.username}`}>
-                  <RxAvatar size={24}/>
-                </Link> */}
 
                 <Button onClick={handleUserPageClick} variant={"ghost"}><RxAvatar size={24}/></Button>
                 

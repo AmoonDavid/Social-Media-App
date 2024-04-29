@@ -39,14 +39,14 @@ import userAtom from '../../atoms/userAtom';
       setLoading(true);
       try {
 
-        const res = await fetch("api/users/login", {
+        const res = await fetch(import.meta.env.VITE_LOGIN_API , {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify(inputs),
         });
-
+  
         const data = await res.json();
       
 
@@ -70,7 +70,7 @@ import userAtom from '../../atoms/userAtom';
         bg={useColorModeValue('white', 'gray.dark')}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={6} px={6}>
           <Stack align={'center'}>
-            <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+            <Heading fontSize={'4xl'} textAlign={"center"}>Sign in to your account</Heading>
           </Stack>
           <Box
             rounded={'lg'}
